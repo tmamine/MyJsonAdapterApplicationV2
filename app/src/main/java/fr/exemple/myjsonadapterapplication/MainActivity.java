@@ -4,10 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import fr.exemple.myjsonadapterapplication.adapter.PrayerRecyclerAdapter;
 import fr.exemple.myjsonadapterapplication.loader.AdhanLoader;
@@ -17,6 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
     // The loader class
     private AdhanLoader adhanLoader;
+
+    // The timePicker
+    private DatePickerDialog datePickerDialog;
+
+    private EditText datePickerEditText;
+    private Button datePickerButton;
+    private TextView datePickerTextView;
 
     // The RecyclerView
     private RecyclerView prayerRecyclerView;
@@ -32,6 +50,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initalise pickers
+        datePickerButton = findViewById(R.id.date_picker_btn);
+        datePickerEditText = findViewById(R.id.date_picker_et);
+        datePickerTextView = findViewById(R.id.date_picker_tv);
+
+        datePickerEditText.setInputType(InputType.TYPE_NULL);
+
+        datePickerEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                datePickerEditText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
+        datePickerButton = findViewById(R.id.date_picker_btn);
+        datePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerTextView.setText("Selected Date: " + datePickerEditText.getText());
+            }
+        });
+
+        //end initializing pickers
+        //--
         Log.d("MainActivity", "onCreate : start");
         // Instantiating the loader and the list
         adhanLoader = AdhanLoader.getInstance(this);
@@ -68,6 +121,10 @@ public class MainActivity extends AppCompatActivity {
      * Downloading prayers, and notifying the adapter when the list is downloaded.
      */
     private void downloadPrayers() {
+        final ProgressBar loading;
+        loading = new ProgressBar(this);
+        loading.setMax(1000);
+
         adhanLoader.getPrayers(new AdhanLoader.AdhanListener<ArrayList<Prayer>>() {
             @Override
             public void onPrayerDownloaded(ArrayList<Prayer> result) {

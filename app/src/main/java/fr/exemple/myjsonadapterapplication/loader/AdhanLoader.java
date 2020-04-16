@@ -159,5 +159,6 @@ public class AdhanLoader {
         }
     }
 
-    public String[] enumPrayer = {"Midnight", "Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Sunset", "Maghrib", "Isha"};
+    //public String[] enumPrayer = {"Midnight", "Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Sunset", "Maghrib", "Isha"};
+    public String[] enumPrayer = {"Imsak", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"};
 }
