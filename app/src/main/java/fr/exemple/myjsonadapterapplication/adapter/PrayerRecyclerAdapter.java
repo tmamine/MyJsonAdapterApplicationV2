@@ -1,14 +1,14 @@
 package fr.exemple.myjsonadapterapplication.adapter;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.icu.text.MessageFormat;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -110,6 +110,7 @@ public class PrayerRecyclerAdapter extends
     }
 
     /**
+     * Method Long to get date of prayer in millisecond
      * @param timePrayer
      * @return time of a prayer in millisecond
      */
